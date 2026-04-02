@@ -385,7 +385,7 @@
           </div>
 
           <div class="field">
-            <label class="label req" for="customerId">ご連絡先のユーザー名（ID）</label>
+            <label class="label req" id="customerIdLabel" for="customerId">ご連絡先のユーザー名（ID）</label>
             <input id="customerId" type="text" placeholder="例：@4madojocraft">
           </div>
         </section>
@@ -468,7 +468,7 @@
                   <span class="card"><span class="title">不要（用紙のみのお渡し）</span><span class="price">+¥0</span></span>
                 </label>
                 <label class="choice">
-                  <input type="radio" name="physicalFinish" value="カット（＋1000円）" data-price="1000">
+                  <input type="radio" name="physicalFinish" value="カット（＋1000円）" data-price="300">
                   <span class="card"><span class="title">カット</span><span class="price">+¥1,000</span><span class="desc">※手作業</span></span>
                 </label>
                 <label class="choice">
@@ -652,8 +652,8 @@
                 <span class="card"><span class="title">掲載OK</span><span class="price">+¥0</span></span>
               </label>
               <label class="choice">
-                <input type="radio" name="snsPermit" value="掲載NG（+¥500）" data-price="1000">
-                <span class="card"><span class="title">掲載NG</span><span class="price">+¥500</span></span>
+                <input type="radio" name="snsPermit" value="掲載NG（+¥1000）" data-price="1000">
+                <span class="card"><span class="title">掲載NG</span><span class="price">+¥1000</span></span>
               </label>
             </div>
           </div>
@@ -754,6 +754,14 @@
           </div>
 
           <div class="output" id="outputText">ここにDM用のテキストが表示されます。</div>
+
+          <div id="sendActionBox" class="hidden">
+            <div class="oknote" id="sendActionNote">媒体に合わせた送信アクションを表示します。</div>
+            <div class="buttonrow">
+              <button type="button" id="sendActionBtn">選択中の媒体で送る</button>
+            </div>
+            <div class="alert hidden" id="sendActionGuide"></div>
+          </div>
         </div>
       </aside>
     </div>
@@ -1250,6 +1258,127 @@
       }
     }
 
+
+    function syncContactFields(){
+      const platform = getCheckedValue("contactPlatform");
+      const label = $("#customerIdLabel");
+      const input = $("#customerId");
+      if(!label || !input) return;
+
+      if(platform === "その他"){
+        label.textContent = "ご連絡先";
+        input.placeholder = "例：ご希望のご連絡先";
+      }else{
+        label.textContent = "ご連絡先のユーザー名（ID）";
+        input.placeholder = "例：@4madojocraft";
+      }
+    }
+
+    function getMailSubject(state){
+      return "【ぷっくりネームボード】ご依頼内容";
+    }
+
+    function getPlatformConfig(platform){
+      const map = {
+        "Instagram": {
+          mode:"copy-open",
+          label:"Instagramを開く",
+          url:"https://www.instagram.com/direct/inbox/",
+          note:"送信用テキストを自動コピーしてから、Instagramを開きます。",
+          guide:"テキストをコピーしました。InstagramのDM画面で貼り付けて送信してください。アプリが開かない場合はブラウザから開いてください。"
+        },
+        "X": {
+          mode:"copy-open",
+          label:"Xを開く",
+          url:"https://x.com/messages",
+          note:"送信用テキストを自動コピーしてから、Xを開きます。",
+          guide:"テキストをコピーしました。XのDM画面で貼り付けて送信してください。"
+        },
+        "TikTok": {
+          mode:"copy-open",
+          label:"TikTokを開く",
+          url:"https://www.tiktok.com/messages?lang=ja-JP",
+          note:"送信用テキストを自動コピーしてから、TikTokを開きます。",
+          guide:"テキストをコピーしました。TikTokのメッセージ画面で貼り付けて送信してください。"
+        },
+        "その他": {
+          mode:"copy-only",
+          label:"コピーして送る",
+          note:"送信用テキストをコピーして、ご希望の媒体からお送りください。",
+          guide:"テキストをコピーしました。ご希望の媒体で貼り付けて送信してください。"
+        }
+      };
+      return map[platform] || map["その他"];
+    }
+
+    async function copyTextToClipboard(text){
+      try{
+        if(navigator.clipboard && window.isSecureContext){
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      }catch(err){
+      }
+
+      try{
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        ta.style.left = "-9999px";
+        ta.style.top = "0";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        ta.setSelectionRange(0, ta.value.length);
+        const ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return !!ok;
+      }catch(err){
+        return false;
+      }
+    }
+
+    function updateSendActionUI(){
+      const box = $("#sendActionBox");
+      const btn = $("#sendActionBtn");
+      const note = $("#sendActionNote");
+      const guide = $("#sendActionGuide");
+      if(!box || !btn || !note || !guide) return;
+
+      const platform = getCheckedValue("contactPlatform");
+      const cfg = getPlatformConfig(platform);
+      btn.textContent = cfg.label;
+      note.innerHTML = cfg.note;
+      guide.classList.add("hidden");
+      guide.textContent = "";
+    }
+
+    async function runSendAction(){
+      const state = collectState();
+      const missing = validate(state);
+      if(missing.length){
+        buildOutput();
+        updateSendActionUI();
+        $("#sendActionBox").classList.add("hidden");
+        return;
+      }
+
+      const text = $("#outputText").textContent || "";
+      const platform = state.form.contactPlatform;
+      const cfg = getPlatformConfig(platform);
+      const guide = $("#sendActionGuide");
+
+      const copied = await copyTextToClipboard(text);
+      guide.textContent = copied ? cfg.guide : "コピーに失敗しました。手動でコピーしてから送信してください。";
+      guide.classList.remove("hidden");
+
+      if(cfg.mode === "copy-open" && cfg.url){
+        window.open(cfg.url, "_blank");
+      }
+    }
+
     function collectState(){
       const orderType = getCheckedValue("orderType");
       const language = getCheckedValue("language");
@@ -1388,6 +1517,7 @@
       const missing = validate(state);
       if(missing.length){
         $("#outputText").textContent = `以下の必須項目が未入力です：\n- ${missing.join("\n- ")}`;
+        $("#sendActionBox").classList.add("hidden");
         updateSummary();
         return;
       }
@@ -1447,11 +1577,18 @@
 
       $("#outputText").textContent = lines.join("\n");
       updateSummary();
+      updateSendActionUI();
+      $("#sendActionBox").classList.remove("hidden");
     }
 
     document.addEventListener("change", (e) => {
       if(e.target.name === "language"){
         syncTypeAndFont();
+      }
+
+      if(e.target.name === "contactPlatform"){
+        syncContactFields();
+        updateSendActionUI();
       }
 
       if(e.target.name === "texture"){
@@ -1501,15 +1638,22 @@
     document.addEventListener("input", updateSummary);
 
     $("#buildBtn").addEventListener("click", buildOutput);
+    $("#sendActionBtn").addEventListener("click", runSendAction);
     $("#copyBtn").addEventListener("click", async () => {
       const text = $("#outputText").textContent || "";
-      try{
-        await navigator.clipboard.writeText(text);
+      const ok = await copyTextToClipboard(text);
+
+      if(ok){
         $("#copyBtn").textContent = "コピーしました";
         setTimeout(() => $("#copyBtn").textContent = "コピー", 1400);
-      }catch(err){
-        $("#copyBtn").textContent = "コピー失敗";
-        setTimeout(() => $("#copyBtn").textContent = "コピー", 1400);
+      }else{
+        const range = document.createRange();
+        range.selectNodeContents($("#outputText"));
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        $("#copyBtn").textContent = "手動コピーしてね";
+        setTimeout(() => $("#copyBtn").textContent = "コピー", 1600);
       }
     });
     $("#resetBtn").addEventListener("click", () => {
@@ -1527,12 +1671,17 @@
         if(group[0] === el) el.checked = true;
       });
       $("#outputText").textContent = "ここにDM用のテキストが表示されます。";
+      $("#sendActionBox").classList.add("hidden");
       syncTypeAndFont();
+      syncContactFields();
       refreshConditionalUI();
+      updateSendActionUI();
       updateSummary();
     });
 
     initStaticGrids();
+    syncContactFields();
+    updateSendActionUI();
   </script>
 </body>
 </html>
