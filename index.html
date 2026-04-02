@@ -420,7 +420,7 @@
             </div>
           </div>
 
-          <div id="physicalBlock" class="hidden">
+          <div id="orderScheduleBlock" class="hidden">
             <div class="field">
               <label class="label req" for="arrivalDate">到着希望日</label>
               <input id="arrivalDate" type="date">
@@ -431,7 +431,9 @@
               <label class="label" for="useDate">使用日・イベント名</label>
               <input id="useDate" type="text" placeholder="例：2026/05/05 東京ドーム / ○○ツアー">
             </div>
+          </div>
 
+          <div id="physicalBlock" class="hidden">
             <div class="field">
               <label class="label req">サイズ</label>
               <div class="grid">
@@ -448,12 +450,12 @@
                   <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">A4普通紙</span><span class="price">+¥0</span></span>
                 </label>
                 <label class="choice">
-                  <input type="radio" name="physicalSize" value="A4光沢紙（＋300円）" data-price="1000">
-                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">A4光沢紙</span><span class="price">+¥1000</span></span>
+                  <input type="radio" name="physicalSize" value="A4光沢紙（＋500円）" data-price="500">
+                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">A4光沢紙</span><span class="price">+¥500</span></span>
                 </label>
                 <label class="choice">
-                  <input type="radio" name="physicalSize" value="A4光沢紙2枚分 連結用（A3サイズ相当）（＋500円）" data-price="500">
-                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">A4光沢紙2枚分 連結用</span><span class="desc">A3サイズ相当</span><span class="price">+¥500</span></span>
+                  <input type="radio" name="physicalSize" value="A4光沢紙2枚分 連結用（A3サイズ相当）（＋800円）" data-price="800">
+                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">A4光沢紙2枚分 連結用</span><span class="desc">A3サイズ相当</span><span class="price">+¥800</span></span>
                 </label>
               </div>
             </div>
@@ -640,8 +642,8 @@
                 <span class="card"><span class="title">掲載OK</span><span class="price">+¥0</span></span>
               </label>
               <label class="choice">
-                <input type="radio" name="snsPermit" value="掲載NG（+¥1000）" data-price="1000">
-                <span class="card"><span class="title">掲載NG</span><span class="price">+¥1000</span></span>
+                <input type="radio" name="snsPermit" value="掲載NG（+¥500）" data-price="1000">
+                <span class="card"><span class="title">掲載NG</span><span class="price">+¥500</span></span>
               </label>
             </div>
           </div>
@@ -801,7 +803,7 @@
       { value:"シンプル（＋0円）", price:0, code:"simple", imageBaseMap:{ "日本語":"jp-base-simple", "韓国語（ハングル）":"kr-base-simple", "英語":"en-base-simple" } },
       { value:"ノーマル（＋100円）", price:100, code:"normal", imageBaseMap:{ "日本語":"jp-base-normal", "韓国語（ハングル）":"kr-base-normal", "英語":"en-base-normal" } },
       { value:"太フチ（内側）（＋200円）", price:200, code:"thickInner", imageBaseMap:{ "日本語":"jp-base-thick-inner", "韓国語（ハングル）":"kr-base-thick-inner", "英語":"en-base-thick-inner" } },
-      { value:"太フチ（外側）（＋300円）", price:1000, code:"thickOuter", imageBaseMap:{ "日本語":"jp-base-thick-outer", "韓国語（ハングル）":"kr-base-thick-outer", "英語":"en-base-thick-outer" } },
+      { value:"太フチ（外側）（＋300円）", price:300, code:"thickOuter", imageBaseMap:{ "日本語":"jp-base-thick-outer", "韓国語（ハングル）":"kr-base-thick-outer", "英語":"en-base-thick-outer" } },
       { value:"フチ1本追加（＋400円）", price:400, code:"extra1", imageBaseMap:{ "日本語":"jp-base-extra1", "韓国語（ハングル）":"kr-base-extra1", "英語":"en-base-extra1" } },
       { value:"フチ2本追加（＋500円）", price:500, code:"extra2", imageBaseMap:{ "日本語":"jp-base-extra2", "韓国語（ハングル）":"kr-base-extra2", "英語":"en-base-extra2" } }
     ];
@@ -1144,6 +1146,7 @@
       const language = getCheckedValue("language");
       const baseCode = getCheckedCode("baseMenu");
 
+      $("#orderScheduleBlock").classList.toggle("hidden", orderType === "gift");
       $("#physicalBlock").classList.toggle("hidden", orderType !== "physical");
 
       const showEdge = baseCode === "thickOuter";
@@ -1228,6 +1231,11 @@
       total += ORDER_TYPE_PRICE[orderType];
       items.push({label:"ご依頼内容", value: orderType === "data" ? "オーダー購入【データでのお渡し】" : orderType === "physical" ? "オーダー購入【現物郵送お渡し】" : "プレゼント企画当選者", price: ORDER_TYPE_PRICE[orderType]});
 
+      if(orderType !== "gift"){
+        items.push({label:"到着希望日", value: state.form.arrivalDate || "未入力", price:0});
+        items.push({label:"使用日・イベント名", value: state.form.useDate || "なし", price:0});
+      }
+
       if(physical){
         total += getCheckedPrice("physicalSize");
         total += getCheckedPrice("physicalFinish");
@@ -1303,7 +1311,7 @@
       const missing = [];
       if(!state.form.customerName) missing.push("お名前");
       if(!state.form.customerId) missing.push("ユーザー名");
-      if(state.physical && !state.form.arrivalDate) missing.push("到着希望日");
+      if(state.orderType !== "gift" && !state.form.arrivalDate) missing.push("到着希望日");
       if(!state.form.textValue) missing.push("お入れする文字");
       if(!state.form.textColor) missing.push("文字色");
       const fringeCount = BASE_FRINGE_COUNT[state.baseCode] || 1;
@@ -1353,9 +1361,12 @@
       lines.push("");
       lines.push(`ご依頼内容：${state.orderType === "data" ? "オーダー購入【データでのお渡し】" : state.orderType === "physical" ? "オーダー購入【現物郵送お渡し】" : "プレゼント企画当選者"}`);
 
-      if(state.physical){
+      if(state.orderType !== "gift"){
         lines.push(`到着希望日：${state.form.arrivalDate}`);
         lines.push(`使用日・イベント名：${state.form.useDate || "なし"}`);
+      }
+
+      if(state.physical){
         lines.push(`サイズ：${getCheckedValue("physicalSize")}`);
         lines.push(`追加オプション：${getCheckedValue("physicalFinish")}`);
       }
