@@ -465,7 +465,7 @@
                 </label>
                 <label class="choice">
                   <input type="radio" name="physicalSize" value="A4光沢紙2枚分 連結用（A3サイズ相当）（＋5000円）" data-price="5000">
-                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">A4光沢紙2枚分 連結用</span><span class="desc">印刷する用紙サイズ（297×420mm）</span><span class="desc">A3サイズ相当</span><span class="price">+¥5,000</span></span>
+                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">A4光沢紙2枚分 連結用</span><span class="desc">印刷する用紙サイズ（210×297mmを2枚）</span><span class="desc">A3サイズ相当</span><span class="price">+¥5,000</span></span>
                 </label>
               </div>
             </div>
@@ -478,12 +478,16 @@
                   <span class="card"><span class="title">不要（用紙のみのお渡し）</span><span class="price">+¥0</span></span>
                 </label>
                 <label class="choice">
+                  <input type="radio" name="physicalFinish" value="ラミネートのみ（マットタイプ）（＋500円）" data-price="500">
+                  <span class="card"><span class="title">ラミネートのみ（マットタイプ）</span><span class="desc">光の反射を抑えたい方におすすめです</span><span class="price">+¥500</span></span>
+                </label>
+                <label class="choice">
                   <input type="radio" name="physicalFinish" value="カット＋ラミネートセット（光沢タイプ）（＋1000円）" data-price="1000">
-                  <span class="card"><span class="title">カット＋ラミネートセット（光沢タイプ）</span><span class="desc">表面がつるつるしており、仕上がりが綺麗に見えやすいです</span><span class="price">+¥1,000</span></span>
+                  <span class="card"><span class="title">カット＋ラミネートセット（光沢タイプ）</span><span class="desc">表面がつるつるしており、仕上がりが綺麗に見えやすいです<br>※カットは手作業です</span><span class="price">+¥1,000</span></span>
                 </label>
                 <label class="choice">
                   <input type="radio" name="physicalFinish" value="カット＋ラミネートセット（マットタイプ）（＋1200円）" data-price="1200">
-                  <span class="card"><span class="title">カット＋ラミネートセット（マットタイプ）</span><span class="desc">光の反射を抑えたい方におすすめです</span><span class="price">+¥1,200</span></span>
+                  <span class="card"><span class="title">カット＋ラミネートセット（マットタイプ）</span><span class="desc">光の反射を抑えたい方におすすめです<br>※カットは手作業です</span><span class="price">+¥1,200</span></span>
                 </label>
               </div>
             </div>
@@ -564,8 +568,8 @@
 
           <div class="field hidden" id="illustrationDetailBlock">
             <label class="label req" for="illustrationDetail">イラストの詳細</label>
-            <textarea id="illustrationDetail" rows="4" placeholder="例：くま / うさぎ / リボン付きハート / 星と月 など"></textarea>
-            <div class="help">※「イラスト」を選んだ場合のみご入力ください。</div>
+            <textarea id="illustrationDetail" rows="4" placeholder="例：うさ耳 / しっぽ / ティアラ / 魔法のステッキ など"></textarea>
+            <div class="help">※「イラスト」を選んだ場合のみご入力ください。<br>※イラストは1点100円～です。難易度によっては増減する場合があります。</div>
           </div>
 
           <div class="field" id="jpAddonBlock">
@@ -874,10 +878,11 @@
       { value:"フチ③グラデーション（＋200円）", price:200, key:"fringe3Gradient", allowed:["extra1","extra2"], group:"finish", fringeNo:3, imageBaseMap:{ "日本語":"jp-finish-fringe3-gradient", "韓国語（ハングル）":"kr-finish-fringe3-gradient", "英語":"en-finish-fringe3-gradient" } },
       { value:"フチ④グラデーション（＋200円）", price:200, key:"fringe4Gradient", allowed:["extra2"], group:"finish", fringeNo:4, imageBaseMap:{ "日本語":"jp-finish-fringe4-gradient", "韓国語（ハングル）":"kr-finish-fringe4-gradient", "英語":"en-finish-fringe4-gradient" } },
       { value:"キルティング（フチ最外層）（＋500円）", price:500, key:"quilting", allowed:["simple","normal","thickInner","thickOuter","extra1","extra2"], group:"finish", imageBaseMap:{ "日本語":"jp-finish-quilting", "韓国語（ハングル）":"kr-finish-quilting", "英語":"en-finish-quilting" } },
-      { value:"イラスト", price:0, priceLabel:"応相談", key:"illustration", allowed:["simple","normal","thickInner","thickOuter","extra1","extra2"], group:"finish" }
+      { value:"イラスト", price:0, priceLabel:"1点100円～", key:"illustration", allowed:["simple","normal","thickInner","thickOuter","extra1","extra2"], group:"finish" }
     ];
 
     const JP_ADDON_OPTIONS = [
+      { value:"文字追加なし（＋0円）", price:0, key:"addonNone", group:"none", imageBase:"jp-finish-none", onlyJapanese:true },
       { value:"名字（みょうじ）追加（＋100円）", price:100, key:"surname", group:"free", imageBase:"jp-addon-surname", onlyJapanese:true },
       { value:"くん追加（＋100円）", price:100, key:"kun", group:"suffix", imageBase:"jp-addon-kun", onlyJapanese:true },
       { value:"ちゃん追加（＋100円）", price:100, key:"chan", group:"suffix", imageBase:"jp-addon-chan", onlyJapanese:true },
@@ -1498,8 +1503,8 @@
       }
 
       if(language === "日本語"){
-        const jpAddonValues = getCheckedValues("jpAddon");
-        const jpAddonPrice = getCheckedPrices("jpAddon");
+        const jpAddonValues = getCheckedValues("jpAddon").filter(v => !v.startsWith("文字追加なし"));
+        const jpAddonPrice = $$("input[name=\"jpAddon\"]:checked").filter(x => !(x.value || "").startsWith("文字追加なし")).reduce((sum, el) => sum + Number(el.dataset.price || 0), 0);
         if(jpAddonValues.length){
           total += jpAddonPrice;
           items.push({label:"文字追加オプション", value:jpAddonValues.join(" / "), price:jpAddonPrice});
@@ -1678,6 +1683,18 @@
 
       if(e.target.name === "jpAddon" && e.target.checked){
         const cfg = JP_ADDON_OPTIONS.find(x => x.value === e.target.value);
+
+        // 追加なしを選んだら他は外す
+        if(cfg?.group === "none"){
+          $$('input[name="jpAddon"]').forEach(el => {
+            if(el !== e.target) el.checked = false;
+          });
+        }else{
+          $$('input[name="jpAddon"]').forEach(el => {
+            const otherCfg = JP_ADDON_OPTIONS.find(x => x.value === el.value);
+            if(otherCfg?.group === "none") el.checked = false;
+          });
+        }
 
         // くん / ちゃん はどちらか片方のみ
         if(cfg?.group === "suffix"){
