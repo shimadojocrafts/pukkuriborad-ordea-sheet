@@ -44,6 +44,15 @@
       user-select:none;
       pointer-events:none;
     }
+    .sample-image-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      align-items:start;
+    }
+    .sample-image-row .sample-image-box{
+      min-height:120px;
+    }
     .wrap{
       max-width:980px;
       margin:0 auto;
@@ -453,19 +462,84 @@
               <div class="grid">
                 <label class="choice">
                   <input type="radio" name="physicalSize" value="L版1/2サイズ（おおよそ名刺サイズ相当）（＋3000円）" data-price="3000" checked>
-                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">L版1/2サイズ</span><span class="desc">印刷する用紙サイズ（89×127mm）</span><span class="desc">おおよそ名刺サイズ相当</span><span class="price">+¥3,000</span></span>
+                  <span class="card">
+                    <div class="sample-image-box">
+                      <img src="画像/physical-size-l-half.png"
+                           alt="physical-size-l-half"
+                           loading="lazy"
+                           onerror="
+                             if(!this.dataset.tryjpg){this.dataset.tryjpg='1';this.src='画像/physical-size-l-half.jpg';}
+                             else if(!this.dataset.tryjpeg){this.dataset.tryjpeg='1';this.src='画像/physical-size-l-half.jpeg';}
+                             else if(!this.dataset.trywebp){this.dataset.trywebp='1';this.src='画像/physical-size-l-half.webp';}
+                             else {this.outerHTML='<div class=\'mini lang-sample\'>画像/physical-size-l-half を確認</div>';}
+                           ">
+                    </div>
+                    <span class="title">L版1/2サイズ</span><span class="desc">印刷する用紙サイズ（89×127mm）</span><span class="desc">おおよそ名刺サイズ相当</span><span class="price">+¥3,000</span>
+                  </span>
                 </label>
                 <label class="choice">
                   <input type="radio" name="physicalSize" value="L版写真用紙（＋3000円）" data-price="3000">
-                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">L版写真用紙</span><span class="desc">印刷する用紙サイズ（89×127mm）</span><span class="price">+¥3,000</span></span>
+                  <span class="card">
+                    <div class="sample-image-box">
+                      <img src="画像/physical-size-l.png"
+                           alt="physical-size-l"
+                           loading="lazy"
+                           onerror="
+                             if(!this.dataset.tryjpg){this.dataset.tryjpg='1';this.src='画像/physical-size-l.jpg';}
+                             else if(!this.dataset.tryjpeg){this.dataset.tryjpeg='1';this.src='画像/physical-size-l.jpeg';}
+                             else if(!this.dataset.trywebp){this.dataset.trywebp='1';this.src='画像/physical-size-l.webp';}
+                             else {this.outerHTML='<div class=\'mini lang-sample\'>画像/physical-size-l を確認</div>';}
+                           ">
+                    </div>
+                    <span class="title">L版写真用紙</span><span class="desc">印刷する用紙サイズ（89×127mm）</span><span class="price">+¥3,000</span>
+                  </span>
                 </label>
                 <label class="choice">
                   <input type="radio" name="physicalSize" value="A4光沢紙（＋4000円）" data-price="4000">
-                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">A4光沢紙</span><span class="desc">印刷する用紙サイズ（210×297mm）</span><span class="price">+¥4,000</span></span>
+                  <span class="card">
+                    <div class="sample-image-box">
+                      <img src="画像/physical-size-a4.png"
+                           alt="physical-size-a4"
+                           loading="lazy"
+                           onerror="
+                             if(!this.dataset.tryjpg){this.dataset.tryjpg='1';this.src='画像/physical-size-a4.jpg';}
+                             else if(!this.dataset.tryjpeg){this.dataset.tryjpeg='1';this.src='画像/physical-size-a4.jpeg';}
+                             else if(!this.dataset.trywebp){this.dataset.trywebp='1';this.src='画像/physical-size-a4.webp';}
+                             else {this.outerHTML='<div class=\'mini lang-sample\'>画像/physical-size-a4 を確認</div>';}
+                           ">
+                    </div>
+                    <span class="title">A4光沢紙</span><span class="desc">印刷する用紙サイズ（210×297mm）</span><span class="price">+¥4,000</span>
+                  </span>
                 </label>
                 <label class="choice">
                   <input type="radio" name="physicalSize" value="A4光沢紙2枚分 連結用（A3サイズ相当）（＋5000円）" data-price="5000">
-                  <span class="card"><div class="mini lang-sample">日本語用サンプル画像を差し替え</div><span class="title">A4光沢紙2枚分 連結用</span><span class="desc">印刷する用紙サイズ（210×297mmを2枚）</span><span class="desc">A3サイズ相当</span><span class="price">+¥5,000</span></span>
+                  <span class="card">
+                    <div class="sample-image-row">
+                      <div class="sample-image-box">
+                        <img src="画像/physical-size-a4x2-open.png"
+                             alt="physical-size-a4x2-open"
+                             loading="lazy"
+                             onerror="
+                               if(!this.dataset.tryjpg){this.dataset.tryjpg='1';this.src='画像/physical-size-a4x2-open.jpg';}
+                               else if(!this.dataset.tryjpeg){this.dataset.tryjpeg='1';this.src='画像/physical-size-a4x2-open.jpeg';}
+                               else if(!this.dataset.trywebp){this.dataset.trywebp='1';this.src='画像/physical-size-a4x2-open.webp';}
+                               else {this.outerHTML='<div class=\'mini lang-sample\'>画像/physical-size-a4x2-open を確認</div>';}
+                             ">
+                      </div>
+                      <div class="sample-image-box">
+                        <img src="画像/physical-size-a4x2-folded.png"
+                             alt="physical-size-a4x2-folded"
+                             loading="lazy"
+                             onerror="
+                               if(!this.dataset.tryjpg){this.dataset.tryjpg='1';this.src='画像/physical-size-a4x2-folded.jpg';}
+                               else if(!this.dataset.tryjpeg){this.dataset.tryjpeg='1';this.src='画像/physical-size-a4x2-folded.jpeg';}
+                               else if(!this.dataset.trywebp){this.dataset.trywebp='1';this.src='画像/physical-size-a4x2-folded.webp';}
+                               else {this.outerHTML='<div class=\'mini lang-sample\'>画像/physical-size-a4x2-folded を確認</div>';}
+                             ">
+                      </div>
+                    </div>
+                    <span class="title">A4光沢紙2枚分 連結用</span><span class="desc">印刷する用紙サイズ（210×297mmを2枚）</span><span class="desc">A3サイズ相当</span><span class="price">+¥5,000</span>
+                  </span>
                 </label>
               </div>
             </div>
@@ -568,7 +642,7 @@
 
           <div class="field hidden" id="illustrationDetailBlock">
             <label class="label req" for="illustrationDetail">イラストの詳細</label>
-            <textarea id="illustrationDetail" rows="4" placeholder="例：うさ耳 / しっぽ / ティアラ / 魔法のステッキ など"></textarea>
+            <textarea id="illustrationDetail" rows="4" placeholder="例：うさ耳 / しっぽ / ティアラ / 魔法のステッキ / 王冠（参考画像あり） など"></textarea>
             <div class="help">※「イラスト」を選んだ場合のみご入力ください。<br>※イラストは1点100円～です。難易度によっては増減する場合があります。</div>
           </div>
 
@@ -707,9 +781,9 @@
             </div>
             <div class="mutedbox">
               【納品後特典】<br>
-              1媒体メンション投稿：<br>次回BASE限定 200円OFFクーポン<br>
-              2媒体メンション投稿：<br>次回BASE限定 300円OFFクーポン<br>
-              3媒体メンション投稿：<br>次回BASE限定 500円OFFクーポン<br><br>
+              1媒体メンション投稿：<br>次回BASE限定 300円OFFクーポン<br>
+              2媒体メンション投稿：<br>次回BASE限定 500円OFFクーポン<br>
+              3媒体メンション投稿：<br>次回BASE限定 1000円OFFクーポン<br><br>
               ※特典は、納品後にメンション付き投稿を確認できた場合のみお渡しします。<br>
               ※クーポンは次回ご注文時にご利用いただけます。
             </div>
