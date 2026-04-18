@@ -919,7 +919,7 @@
       { value:"くん追加（＋100円）", price:100, key:"kun", group:"suffix", imageBase:"jp-addon-kun", onlyJapanese:true },
       { value:"ちゃん追加（＋100円）", price:100, key:"chan", group:"suffix", imageBase:"jp-addon-chan", onlyJapanese:true },
       { value:"グループ名（中央）追加（＋100円）", price:100, key:"groupCenter", group:"groupName", imageBase:"jp-addon-group-center", onlyJapanese:true },
-      { value:"グループ名（左上）追加（＋100円）", price:100, key:"groupTopLeft", group:"groupName", imageBase:"jp-addon-group-topleft", onlyJapanese:true }
+      { value:"グループ名（左上）追加（＋100円）", price:100, key:"groupTopLeft", group:"groupName", imageBase:"jp-addon-group-topleft", onlyJapanese:true, note:"※グループ名以外もキャッチコピーなどの短いフレーズをお入れすることもできます" }
     ];
 
     const TEXTURE_OPTIONS = [
@@ -1039,11 +1039,13 @@
       list.forEach((item) => {
         const wrap = document.createElement("label");
         wrap.className = "choice";
+        const noteMarkup = item.note ? `<span class="desc">${item.note}</span>` : "";
         wrap.innerHTML = `
           <input type="checkbox" name="${name}" value="${item.value}" data-price="${item.price ?? 0}" ${item.key ? `data-key="${item.key}"` : ""} ${item.group ? `data-group="${item.group}"` : ""}>
           <span class="card">
             ${languageImageMarkup(item, "日本語以外の画像はあとから差し替え")}
             <span class="title">${item.value.replace(/（[＋\+]\d+円）/g,"").replace("（＋0円）","").replace("（+0円）","")}</span>
+            ${noteMarkup}
             <span class="price">${yen(item.price ?? 0)}</span>
           </span>
         `;
