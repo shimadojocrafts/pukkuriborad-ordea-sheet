@@ -1244,7 +1244,7 @@
       $("#textHint").innerHTML = TEXT_HINTS[language] || TEXT_HINTS["日本語"];
       $("#textValue").placeholder = TEXT_PLACEHOLDERS[language] || TEXT_PLACEHOLDERS["日本語"];
       const fontOptions = FONT_OPTIONS[language] || FONT_OPTIONS["日本語"];
-      $("#fontHint").textContent = fontOptions.map(x => x.note).filter(Boolean).join(" / ");
+      $("#fontHint").textContent = "";
       buildBaseCards($("#baseGrid"), "baseMenu", BASE_OPTIONS);
       rebuildEdgeDecorationGrid();
       buildTextureCards($("#textureGrid"), "texture", TEXTURE_OPTIONS);
