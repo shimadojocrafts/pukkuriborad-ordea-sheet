@@ -194,7 +194,7 @@
       line-height:1.45;
     }
     .mini{
-      min-height:68px;
+      min-height:56px;
       display:flex; align-items:center; justify-content:center;
       border:1px dashed #dfcfdb;
       border-radius:12px;
@@ -202,11 +202,11 @@
       color:#9f8e9d;
       font-size:.8rem;
       text-align:center;
-      padding:8px;
+      padding:6px;
     }
 
     .sample-image-box{
-      min-height:140px;
+      min-height:96px;
       border:1px dashed #dfcfdb;
       border-radius:12px;
       background:#ffffff;
@@ -214,7 +214,7 @@
       align-items:center;
       justify-content:center;
       overflow:hidden;
-      padding:8px;
+      padding:2px;
     }
     .sample-image-box img{
       width:100%;
@@ -840,12 +840,12 @@
         { value:"ふてほど", note:"", imageBase:"jp-font-1" },
         { value:"はちまる", note:"", imageBase:"jp-font-2" },
         { value:"かさね丸", note:"", imageBase:"jp-font-3" },
-        { value:"ぽぷらむ", note:"", imageBase:"jp-font-4" },
+        { value:"ぽぷらむ", note:"※ひらがなカタカナのみ", imageBase:"jp-font-4" },
         { value:"にくまる", note:"", imageBase:"jp-font-5" },
-        { value:"づにのい", note:"", imageBase:"jp-font-6" },
-        { value:"チェリー", note:"", imageBase:"jp-font-7" },
+        { value:"づにのい", note:"※ひらがなのみ", imageBase:"jp-font-6" },
+        { value:"チェリー", note:"※漢字不可", imageBase:"jp-font-7" },
         { value:"創英角", note:"", imageBase:"jp-font-8" },
-        { value:"プぷプ", note:"", imageBase:"jp-font-9" },
+        { value:"プぷプ", note:"※ひらがなカタカナのみ", imageBase:"jp-font-9" },
         { value:"JK丸ゴ", note:"", imageBase:"jp-font-10" }
       ],
       "韓国語（ハングル）": [
@@ -1001,11 +1001,13 @@
         const wrap = document.createElement("label");
         wrap.className = "choice";
         const imageMarkup = item.imageBase === null ? "" : languageImageMarkup(item, "日本語以外の画像はあとから差し替え");
+        const noteMarkup = item.note ? `<span class="desc">${item.note}</span>` : "";
         wrap.innerHTML = `
           <input type="radio" name="${name}" value="${item.value}" data-price="0" ${idx===defaultIndex ? "checked" : ""}>
           <span class="card">
             ${imageMarkup}
             <span class="title">${item.value}</span>
+            ${noteMarkup}
             <span class="price">${yen(0)}</span>
           </span>
         `;
